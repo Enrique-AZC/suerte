@@ -38,33 +38,28 @@
 
   <script src="https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.min.js"></script>
   <script>
-    // Frases para el easter egg
     const frases = ["Estrellita", "Guapetona", "Alcaldesa de Bañón", "Ángel", "Te quiero"];
 
-    // Escena, cámara, render
+    // Escena y cámara
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
     camera.position.z = 5;
 
+    // Render con fondo negro
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x000000); // Fondo negro explícito
     document.body.appendChild(renderer.domElement);
 
-    // Luz ambiental y puntual
-    scene.add(new THREE.AmbientLight(0xffffff, 0.2));
-    const light = new THREE.PointLight(0xffaa33, 1.5, 10);
-    light.position.set(0, 1.5, 2);
-    scene.add(light);
-
-    // Vela (cilindro)
+    // Vela (color blanco puro, sin depender de luz)
     const candleGeometry = new THREE.CylinderGeometry(0.4, 0.4, 2, 32);
-    const candleMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.8, metalness: 0 });
+    const candleMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
     const candle = new THREE.Mesh(candleGeometry, candleMaterial);
     scene.add(candle);
 
-    // Llama (cono invertido)
+    // Llama (color amarillo/naranja con brillo)
     const flameGeometry = new THREE.ConeGeometry(0.15, 0.4, 32);
-    const flameMaterial = new THREE.MeshStandardMaterial({ color: 0xffcc33, emissive: 0xffaa33, emissiveIntensity: 1 });
+    const flameMaterial = new THREE.MeshBasicMaterial({ color: 0xffcc33 });
     const flame = new THREE.Mesh(flameGeometry, flameMaterial);
     flame.position.y = 1.2;
     scene.add(flame);
@@ -84,6 +79,7 @@
         document.getElementById("buenaSuerte").style.display = "block";
       }
     }
+
     window.addEventListener("click", onClick);
     window.addEventListener("touchstart", (e) => {
       if (e.touches.length > 0) {
@@ -100,7 +96,7 @@
     }
     animate();
 
-    // Ajuste de ventana
+    // Ajuste en cambio de pantalla
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
